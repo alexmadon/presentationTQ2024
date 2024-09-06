@@ -11,6 +11,10 @@ footer: Lisbon 2024
 
 Point of view: support: identifying/understanding problems 
 
+The slides and code are at:
+https://github.com/alexmadon/presentationTQ2024
+
+
 # Plan
 
 1. ActiveMQ protocols
@@ -122,3 +126,6 @@ https://github.com/Alfresco/acs-packaging/blob/master/docs/creating-a-t-engine.m
 # QA
 
 Thank You!
+
+The slides and code are at:
+https://github.com/alexmadon/presentationTQ2024
