@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+import argparse
+import time
+import json
+
+import stomp # pip3 install stomp.py
+
+class AlexListener(stomp.ConnectionListener):      
+    def on_message(self,message):
+        print("message.headers:",json.dumps(message.headers,indent=4,default=str))
+        body=message.body
+        body=json.loads(body)
+        print("message.body:",json.dumps(body,indent=4,default=str))
+
+def set_topics(opts):
+    "Sets the list of topics form the CLI options"
+    topics=list(opts.topics)
+    if opts.event2:
+        topics.append("/topic/alfresco.repo.event2")
+    if opts.trequest:
+        topics.append("/topic/org.alfresco.transform.t-request.acs.qmirroralex")
+
+    if len(topics)==0:
+        print("Please specify what topic you want to listen too")
+        quit()
+    return topics
+
+def main(opts):
+
+    conn = stomp.Connection([('localhost', 61613)])
+    conn.set_listener('', AlexListener())
+    conn.connect('admin', 'password', wait=True)
+
+    topics=set_topics(opts)
+    for index,topic in enumerate(topics):
+        print("subscribing (index,topic)",(index,topic))
+        conn.subscribe(destination=topic, id='alexsubscriberC'+str(index), ack='auto') # you can se it in http://localhost:8161/admin/connections.jsp section "connector stomp", then click on conbnection, send message of type "topic"
+        
+    while conn.is_connected(): # https://github.com/jasonrbriggs/stomp.py/issues/206
+        time.sleep(2)
+
+    print("disconnecting")
+    conn.disconnect()
+
+def parse_cli():
+    parser = argparse.ArgumentParser(
+        description="A minimalistic Alfresco Out of Process application.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument('topics', help="The topics to consume",type=str,nargs='*')
+    parser.add_argument('-e','--event2',  help="consume /topic/alfresco.repo.event2",action="store_true")
+    parser.add_argument('-t','--trequest',  help="consume /topic/org.alfresco.transform.t-request.acs.qmirroralex",action="store_true")
+    opts = parser.parse_args()
+    return opts
+
+if __name__ == "__main__":
+    opts=parse_cli()
+    main(opts)
