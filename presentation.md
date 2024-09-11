@@ -9,7 +9,11 @@ footer: Lisbon 2024
 
 # Alfresco Out of Process application with python
 
-Point of view: support: identifying/understanding problems 
+**Lisboa 2024**
+
+**Alex Madon (TAM Alfresco)**
+
+*Point of view: support: identifying/understanding problems* 
 
 The slides and code are at:
 https://github.com/alexmadon/presentationTQ2024
