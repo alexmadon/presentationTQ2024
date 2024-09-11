@@ -29,10 +29,11 @@ https://github.com/alexmadon/presentationTQ2024
 
 ## active MQ transport connectors and protocols
 
-* amqp: Java [Advanced Message Queuing Protocol](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol) (see also [JMS](https://en.wikipedia.org/wiki/Java_Message_Service)
+* amqp: Java [Advanced Message Queuing Protocol](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol) (see also [JMS](https://en.wikipedia.org/wiki/Java_Message_Service) )
 * stomp: python (and many many others, including java)
 
 See [activemq.xml](activemq.xml):
+
 ```xml
  <!--
      The transport connectors expose ActiveMQ over a given protocol to
@@ -48,6 +49,26 @@ See [activemq.xml](activemq.xml):
      <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
      <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
  </transportConnectors>
+```
+
+## Note: if you run activemq in docker
+
+You may need to expose the stomp port (update you `compose.yaml`):
+
+```
+  activemq:
+    image: alfresco/alfresco-activemq:5.18-jre17-rockylinux8
+    ports:
+      - "8161:8161" # Web Console
+      - "61616:61616" # OpenWire
+      - "61613:61613" # Stomp
+```
+
+check with `docker ps -a`
+
+```
+docker ps -a
+53cf03bb2484   alfresco/alfresco-activemq:5.18-jre17-rockylinux8       ...0.0.0.0:61613->61613/tcp...
 ```
 
 ## STOMP
@@ -75,7 +96,18 @@ https://pypi.org/project/stomp-py/
 
 Benefits of *loose coupling*: performance + freedom
 
+Example: https://hyland.atlassian.net/browse/MNT-24580
+
 ## ActiveMQ and python: event2 demo
+
+```
+pip3 install stomp.py
+```
+or
+```
+apt-get install python3-stomp
+```
+or ...
 
 DEMO1
 
