@@ -27,7 +27,7 @@ def set_topics(opts):
 
 def main(opts):
 
-    conn = stomp.Connection([('localhost', 61613)])
+    conn = stomp.Connection([('localhost', opts.port)]) # default 61613
     conn.set_listener('', AlexListener())
     conn.connect('admin', 'password', wait=True)
 
@@ -50,6 +50,8 @@ def parse_cli():
     parser.add_argument('topics', help="The topics to consume",type=str,nargs='*')
     parser.add_argument('-e','--event2',  help="consume /topic/alfresco.repo.event2",action="store_true")
     parser.add_argument('-t','--trequest',  help="consume /topic/org.alfresco.transform.t-request.acs.qmirroralex",action="store_true")
+    parser.add_argument('-p','--port',  help="STOMP port as per activemq.xml",type=int,default=61613)
+    
     opts = parser.parse_args()
     return opts
 
